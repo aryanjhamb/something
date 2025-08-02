@@ -89,6 +89,7 @@ class ResumePortfolioGenerator {
     this.skills = []
     this.experience = []
     this.education = []
+    this.projects = []
 
     this.initializeEventListeners()
     this.initializeFormData()
@@ -643,6 +644,7 @@ class ResumePortfolioGenerator {
     this.experience = []
     this.education = []
     this.skills = []
+    this.projects = []
 
     // Experience
     if (data.experience) {
@@ -666,6 +668,11 @@ class ResumePortfolioGenerator {
     if (data.skills) {
       this.skills = [...data.skills]
       this.updateSkillsDisplay()
+    }
+
+    // Projects (no form UI yet, just keep in memory for generation)
+    if (data.projects) {
+      this.projects = [...data.projects]
     }
   }
 
@@ -858,6 +865,7 @@ class ResumePortfolioGenerator {
       experience: this.experience,
       education: this.education,
       skills: this.skills,
+      projects: this.projects,
     }
 
     // Simulate generation delay
@@ -878,7 +886,7 @@ class ResumePortfolioGenerator {
   }
 
   generatePortfolioHTML() {
-    const { personal, experience, education, skills } = this.resumeData
+    const { personal, experience, education, projects, skills } = this.resumeData
     const primaryColor = document.getElementById("primaryColor").value
     const secondaryColor = document.getElementById("secondaryColor").value
     const fontFamily = document.getElementById("fontFamily").value
@@ -896,6 +904,7 @@ class ResumePortfolioGenerator {
       personal,
       experience,
       education,
+      projects,
       skills,
       primaryColor,
       secondaryColor,
@@ -906,7 +915,7 @@ class ResumePortfolioGenerator {
   }
 
   generateModernTemplate(data) {
-    const { personal, experience, education, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
+    const { personal, experience, education, projects, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
       data
 
     return `
@@ -1126,6 +1135,22 @@ class ResumePortfolioGenerator {
 
     <section class="section">
         <div class="container">
+            <h2>Projects</h2>
+            ${projects
+              .map(
+                (proj) => `
+                <div class="experience-item">
+                    <h3>${proj.title}</h3>
+                    <p>${proj.description}</p>
+                </div>
+            `,
+              )
+              .join("")}
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
             <h2>Skills</h2>
             <div class="skills-grid">
                 ${skills.map((skill) => `<div class="skill-item">${skill}</div>`).join("")}
@@ -1138,7 +1163,7 @@ class ResumePortfolioGenerator {
   }
 
   generateClassicTemplate(data) {
-    const { personal, experience, education, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
+    const { personal, experience, education, projects, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
       data
 
     return `
@@ -1327,6 +1352,20 @@ class ResumePortfolioGenerator {
             </div>
             
             <div class="section">
+                <h2>Projects</h2>
+                ${projects
+                  .map(
+                    (proj) => `
+                    <div class="item">
+                        <h3>${proj.title}</h3>
+                        <p>${proj.description}</p>
+                    </div>
+                `,
+                  )
+                  .join("")}
+            </div>
+
+            <div class="section">
                 <h2>Skills</h2>
                 <div class="skills-list">
                     ${skills.map((skill) => `<span class="skill">${skill}</span>`).join("")}
@@ -1340,7 +1379,7 @@ class ResumePortfolioGenerator {
   }
 
   generateCreativeTemplate(data) {
-    const { personal, experience, education, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
+    const { personal, experience, education, projects, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
       data
 
     return `
@@ -1650,6 +1689,22 @@ class ResumePortfolioGenerator {
         </div>
 
         <div class="content-section">
+            <h2 class="section-title">Projects</h2>
+            <div class="timeline">
+                ${projects
+                  .map(
+                    (proj) => `
+                    <div class="timeline-item">
+                        <h3>${proj.title}</h3>
+                        <p>${proj.description}</p>
+                    </div>
+                `,
+                  )
+                  .join("")}
+            </div>
+        </div>
+
+        <div class="content-section">
             <h2 class="section-title">Skills</h2>
             <div class="skills-cloud">
                 ${skills.map((skill) => `<div class="skill-bubble">${skill}</div>`).join("")}
@@ -1676,7 +1731,7 @@ class ResumePortfolioGenerator {
   }
 
   generateMinimalTemplate(data) {
-    const { personal, experience, education, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
+    const { personal, experience, education, projects, skills, primaryColor, secondaryColor, fontFamily, showPhoto, showSocial } =
       data
 
     return `
@@ -1880,6 +1935,20 @@ class ResumePortfolioGenerator {
                         ${edu.location}
                         ${edu.gpa ? ` • GPA: ${edu.gpa}` : ""}
                     </div>
+                </div>
+            `,
+              )
+              .join("")}
+        </div>
+
+        <div class="section">
+            <h2>Projects</h2>
+            ${projects
+              .map(
+                (proj) => `
+                <div class="item">
+                    <h3>${proj.title}</h3>
+                    <p>${proj.description}</p>
                 </div>
             `,
               )
