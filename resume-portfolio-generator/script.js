@@ -89,6 +89,11 @@ class ResumePortfolioGenerator {
     this.skills = []
     this.experience = []
     this.education = []
+    this.projects = []
+
+    // Initialize data manager
+    this.dataManager = new ResumeDataManager()
+    this.dataManager.loadFromLocalStorage()
 
     this.initializeEventListeners()
     this.initializeFormData()
@@ -442,12 +447,14 @@ class ResumePortfolioGenerator {
       summary: '',
       experience: [],
       education: [],
-      skills: []
+      skills: [],
+      projects: []
     }
 
     let currentSection = ''
     let currentExperience = null
     let currentEducation = null
+    let currentProject = null
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
@@ -486,6 +493,8 @@ class ResumePortfolioGenerator {
         currentSection = 'education'
       } else if (lowerLine.includes('skills') || lowerLine.includes('technical skills') || lowerLine.includes('competencies')) {
         currentSection = 'skills'
+      } else if (lowerLine.includes('project') || lowerLine.includes('portfolio') || lowerLine.includes('personal work')) {
+        currentSection = 'projects'
       }
 
       // Parse summary
@@ -580,63 +589,185 @@ class ResumePortfolioGenerator {
           parsedData.skills.push(line)
         }
       }
+
+      // Parse projects
+      if (currentSection === 'projects') {
+        // Look for project names (usually in caps or title case)
+        if ((line.match(/^[A-Z][A-Za-z\s]+$/) && line.length > 3 && line.length < 50) || 
+            (line.includes(':') && line.toLowerCase().includes('project'))) {
+          if (currentProject) {
+            parsedData.projects.push(currentProject)
+          }
+          currentProject = {
+            name: line.replace(/project:/i, '').trim(),
+            description: '',
+            technologies: [],
+            github_url: '',
+            live_url: '',
+            highlights: []
+          }
+        } else if (currentProject) {
+          // Look for GitHub or live URLs
+          if (lowerLine.includes('github.com') || lowerLine.includes('git')) {
+            currentProject.github_url = line
+          } else if (lowerLine.includes('http') || lowerLine.includes('www.') || lowerLine.includes('live') || lowerLine.includes('demo')) {
+            currentProject.live_url = line
+          } else if (line.includes('Technologies:') || line.includes('Built with:') || line.includes('Stack:')) {
+            // Extract technologies
+            const techLine = line.replace(/Technologies:|Built with:|Stack:/i, '').trim()
+            if (techLine.includes(',')) {
+              currentProject.technologies = techLine.split(',').map(tech => tech.trim()).filter(tech => tech.length > 0)
+            }
+          } else if (line.length > 20 && !line.includes('http')) {
+            // This might be a description or highlight
+            if (currentProject.description.length === 0) {
+              currentProject.description = line
+            } else {
+              currentProject.highlights.push(line)
+            }
+          }
+        }
+      }
     }
 
-    // Add the last experience/education item
+    // Add the last experience/education/project item
     if (currentExperience) {
       parsedData.experience.push(currentExperience)
     }
     if (currentEducation) {
       parsedData.education.push(currentEducation)
     }
+    if (currentProject) {
+      parsedData.projects.push(currentProject)
+    }
 
     // Clean up skills (remove duplicates and empty entries)
     parsedData.skills = [...new Set(parsedData.skills.filter(skill => skill.length > 0))]
+
+    // Use the data manager to import and categorize the parsed data
+    this.dataManager.importFromParser(parsedData)
 
     return parsedData
   }
 
   populateFormData(data) {
+    // Get formatted data from data manager
+    const formattedData = this.dataManager.getFormattedData()
+    
     // Personal information
-    document.getElementById("fullName").value = data.fullName || ""
-    document.getElementById("email").value = data.email || ""
-    document.getElementById("phone").value = data.phone || ""
-    document.getElementById("location").value = data.location || ""
-    document.getElementById("linkedin").value = data.linkedin || ""
-    document.getElementById("github").value = data.github || ""
-    document.getElementById("summary").value = data.summary || ""
+    document.getElementById("fullName").value = formattedData.personal.fullName || ""
+    document.getElementById("email").value = formattedData.personal.email || ""
+    document.getElementById("phone").value = formattedData.personal.phone || ""
+    document.getElementById("location").value = formattedData.personal.location || ""
+    document.getElementById("linkedin").value = formattedData.personal.linkedin || ""
+    document.getElementById("github").value = formattedData.personal.github || ""
+    document.getElementById("summary").value = formattedData.personal.summary || ""
 
     // Clear existing items
     this.experience = []
     this.education = []
     this.skills = []
+    this.projects = []
 
     // Experience
-    if (data.experience) {
+    if (formattedData.experience) {
       document.getElementById("experienceContainer").innerHTML = ""
-      data.experience.forEach((exp) => {
+      formattedData.experience.forEach((exp) => {
         this.experience.push(exp)
         this.addExperienceItem(exp)
       })
     }
 
     // Education
-    if (data.education) {
+    if (formattedData.education) {
       document.getElementById("educationContainer").innerHTML = ""
-      data.education.forEach((edu) => {
+      formattedData.education.forEach((edu) => {
         this.education.push(edu)
         this.addEducationItem(edu)
       })
     }
 
-    // Skills
-    if (data.skills) {
-      this.skills = [...data.skills]
+    // Projects
+    if (formattedData.projects) {
+      // Check if projects container exists, if not we'll add it later
+      const projectContainer = document.getElementById("projectContainer")
+      if (projectContainer) {
+        projectContainer.innerHTML = ""
+        formattedData.projects.forEach((project) => {
+          this.projects.push(project)
+          this.addProjectItem(project)
+        })
+      }
+    }
+
+    // Skills (use the flat array for backward compatibility)
+    if (formattedData.skills) {
+      this.skills = [...formattedData.skills]
       this.updateSkillsDisplay()
     }
   }
 
   // Form Management
+  addProjectItem(data = {}) {
+    const container = document.getElementById("projectContainer")
+    if (!container) return // Skip if projects container doesn't exist yet
+    
+    const index = this.projects.length
+
+    if (!data.name) {
+      this.projects.push({
+        name: "",
+        description: "",
+        technologies: [],
+        github_url: "",
+        live_url: "",
+        highlights: []
+      })
+    }
+
+    const projectData = data.name ? data : this.projects[index]
+    const projectElement = document.createElement("div")
+    projectElement.className = "form-group project-item"
+    projectElement.innerHTML = `
+      <div class="project-header">
+        <h4>Project ${index + 1}</h4>
+        <button type="button" class="btn btn-danger btn-sm" onclick="generator.removeProjectItem(${index})">
+          <i class="fas fa-trash"></i>
+        </button>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>Project Name</label>
+          <input type="text" value="${projectData.name}" onchange="generator.updateProject(${index}, 'name', this.value)">
+        </div>
+        <div class="col">
+          <label>Technologies</label>
+          <input type="text" value="${(projectData.technologies || []).join(', ')}" 
+                 onchange="generator.updateProject(${index}, 'technologies', this.value.split(',').map(t => t.trim()))"
+                 placeholder="React, Node.js, MongoDB">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>GitHub URL</label>
+          <input type="url" value="${projectData.github_url || ''}" 
+                 onchange="generator.updateProject(${index}, 'github_url', this.value)">
+        </div>
+        <div class="col">
+          <label>Live URL</label>
+          <input type="url" value="${projectData.live_url || ''}" 
+                 onchange="generator.updateProject(${index}, 'live_url', this.value)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea rows="3" onchange="generator.updateProject(${index}, 'description', this.value)" 
+                  placeholder="Brief description of the project">${projectData.description || ''}</textarea>
+      </div>
+    `
+    container.appendChild(projectElement)
+  }
+
   addExperienceItem(data = {}) {
     const container = document.getElementById("experienceContainer")
     const index = this.experience.length
@@ -789,6 +920,28 @@ class ResumePortfolioGenerator {
     this.updateSkillsDisplay()
   }
 
+  // Project Management Functions
+  updateProject(index, field, value) {
+    if (this.projects[index]) {
+      this.projects[index][field] = value
+    }
+  }
+
+  removeProjectItem(index) {
+    this.projects.splice(index, 1)
+    this.refreshProjectsDisplay()
+  }
+
+  refreshProjectsDisplay() {
+    const container = document.getElementById("projectContainer")
+    if (!container) return
+    
+    container.innerHTML = ""
+    this.projects.forEach((project, index) => {
+      this.addProjectItem(project)
+    })
+  }
+
   // Template Selection
   selectTemplate(e) {
     const card = e.currentTarget
@@ -811,21 +964,27 @@ class ResumePortfolioGenerator {
 
     this.showLoading()
 
-    // Collect all form data
-    this.resumeData = {
-      personal: {
-        fullName: document.getElementById("fullName").value,
-        email: document.getElementById("email").value,
-        phone: document.getElementById("phone").value,
-        location: document.getElementById("location").value,
-        linkedin: document.getElementById("linkedin").value,
-        github: document.getElementById("github").value,
-        summary: document.getElementById("summary").value,
-      },
-      experience: this.experience,
-      education: this.education,
-      skills: this.skills,
-    }
+    // Update data manager with current form data
+    this.dataManager.updatePersonalInfo({
+      fullName: document.getElementById("fullName").value,
+      email: document.getElementById("email").value,
+      phone: document.getElementById("phone").value,
+      location: document.getElementById("location").value,
+      linkedin: document.getElementById("linkedin").value,
+      github: document.getElementById("github").value,
+      summary: document.getElementById("summary").value,
+    })
+
+    // Update experience, education, skills, and projects in data manager
+    this.dataManager.data.experience = this.experience
+    this.dataManager.data.education = this.education
+    this.dataManager.data.projects = this.projects
+    
+    // Save all data
+    await this.dataManager.saveAllData()
+
+    // Get formatted data for portfolio generation
+    this.resumeData = this.dataManager.getFormattedData()
 
     // Simulate generation delay
     await new Promise((resolve) => setTimeout(resolve, 1500))
