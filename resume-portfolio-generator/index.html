@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoFolio - Portfolio Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h2>AutoFolio </h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#features" class="nav-link">Features</a></li>
+                <li><a href="#themes" class="nav-link">Themes</a></li>
+                <li><a href="#generator" class="nav-link btn btn-primary">Get Started</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Build your professional portfolio in minutes
+                </h1>
+                <p class="hero-subtitle">
+                    Create stunning portfolio websites that showcase your work and skills. Choose from beautiful themes, customize with our intuitive form wizard, and publish your portfolio instantly.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#generator" class="btn btn-primary btn-large">
+                        <i class="fas fa-rocket"></i>
+                        Get Started
+                    </a>
+                </div>
+                <div class="hero-badge">
+                    <i class="fas fa-check-circle"></i>
+                    No coding required • Professional results
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-mockup">
+                    <div class="mockup-screen">
+                        <div class="mockup-header"></div>
+                        <div class="mockup-content">
+                            <div class="mockup-avatar"></div>
+                            <div class="mockup-text">
+                                <div class="mockup-line"></div>
+                                <div class="mockup-line short"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>How it works</h2>
+                <p>Three simple steps to create your professional portfolio</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Choose Theme</h3>
+                    <p>Select from our beautiful pre-designed themes</p>
+                    <div class="step-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Add Content</h3>
+                    <p>Fill in your information with our guided wizard</p>
+                    <div class="step-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Publish</h3>
+                    <p>Go live instantly with your new portfolio</p>
+                    <div class="step-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Powerful Features</h2>
+                <p>Everything you need to create amazing portfolios</p>
+                <p class="section-subtitle">Our platform provides all the tools and features you need to build a professional portfolio that showcases your work effectively.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Beautiful Themes</h3>
+                    <p>Choose from professionally designed templates that look great on any device</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Easy Customization</h3>
+                    <p>No coding required. Our intuitive form wizard makes it simple to add your content</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Responsive Design</h3>
+                    <p>All portfolios are fully responsive and look perfect on desktop, tablet, and mobile</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Instant Download</h3>
+                    <p>Get your portfolio as a complete HTML file ready to upload anywhere</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Live Preview</h3>
+                    <p>See your changes in real-time as you customize your portfolio</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy First</h3>
+                    <p>Your data stays on your device. No accounts or personal information required</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Generator App -->
+    <div id="generator" class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <h1><i class="fas fa-file-alt"></i> Resume to Portfolio Generator</h1>
+                <p>Transform your resume into a stunning portfolio website</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="container">
+                <!-- Step 1: Upload Resume -->
+                <section id="upload-section" class="section active">
+                    <div class="section-header">
+                        <h2><span class="step-number">1</span> Upload Your Resume</h2>
+                        <p>Upload your resume in PDF or DOCX format</p>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                            <h3>Drag & Drop your resume here</h3>
+                            <p>or <span class="browse-link">browse files</span></p>
+                            <input type="file" id="fileInput" accept=".pdf,.docx,.doc" hidden>
+                            <div class="supported-formats">
+                                <small>Supported formats: PDF, DOCX, DOC</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="filePreview" class="file-preview hidden">
+                        <div class="file-info">
+                            <i class="fas fa-file-pdf file-icon"></i>
+                            <div class="file-details">
+                                <span class="file-name"></span>
+                                <span class="file-size"></span>
+                            </div>
+                            <button class="remove-file" id="removeFile">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary" id="parseResume">
+                            <i class="fas fa-cogs"></i> Parse Resume
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Step 2: Review Parsed Data -->
+                <section id="review-section" class="section">
+                    <div class="section-header">
+                        <h2><span class="step-number">2</span> Review & Edit Information</h2>
+                        <p>Review the extracted information and make any necessary edits</p>
+                    </div>
+
+                    <div class="parsed-data-container">
+                        <div class="data-section">
+                            <h3><i class="fas fa-user"></i> Personal Information</h3>
+                            <div class="form-grid">
+                                <input type="text" id="fullName" placeholder="Full Name">
+                                <input type="email" id="email" placeholder="Email">
+                                <input type="tel" id="phone" placeholder="Phone">
+                                <input type="text" id="location" placeholder="Location">
+                                <input type="url" id="linkedin" placeholder="LinkedIn URL">
+                                <input type="url" id="github" placeholder="GitHub URL">
+                            </div>
+                        </div>
+
+                        <div class="data-section">
+                            <h3><i class="fas fa-quote-left"></i> Professional Summary</h3>
+                            <textarea id="summary" rows="4" placeholder="Professional summary..."></textarea>
+                        </div>
+
+                        <div class="data-section">
+                            <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+                            <div id="experienceContainer">
+                                <!-- Experience items will be added dynamically -->
+                            </div>
+                            <button class="btn btn-secondary" id="addExperience">
+                                <i class="fas fa-plus"></i> Add Experience
+                            </button>
+                        </div>
+
+                        <div class="data-section">
+                            <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                            <div id="educationContainer">
+                                <!-- Education items will be added dynamically -->
+                            </div>
+                            <button class="btn btn-secondary" id="addEducation">
+                                <i class="fas fa-plus"></i> Add Education
+                            </button>
+                        </div>
+
+                        <div class="data-section">
+                            <h3><i class="fas fa-code"></i> Skills</h3>
+                            <div class="skills-input">
+                                <input type="text" id="skillInput" placeholder="Add a skill and press Enter">
+                                <div id="skillsList" class="skills-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="proceedToTemplates">
+                        <i class="fas fa-arrow-right"></i> Choose Template
+                    </button>
+                </section>
+
+                <!-- Step 3: Choose Template -->
+                <section id="template-section" class="section">
+                    <div class="section-header">
+                        <h2><span class="step-number">3</span> Choose Your Template</h2>
+                        <p>Select a design template for your portfolio website</p>
+                    </div>
+
+                    <div class="templates-grid">
+                        <div class="template-card" data-template="modern">
+                            <div class="template-preview">
+                                <div class="preview-header modern-preview">
+                                    <div class="preview-avatar"></div>
+                                    <div class="preview-info">
+                                        <div class="preview-name"></div>
+                                        <div class="preview-title"></div>
+                                    </div>
+                                </div>
+                                <div class="preview-content">
+                                    <div class="preview-section"></div>
+                                    <div class="preview-section"></div>
+                                </div>
+                            </div>
+                            <h3>Modern</h3>
+                            <p>Clean and contemporary design</p>
+                        </div>
+
+                        <div class="template-card" data-template="classic">
+                            <div class="template-preview">
+                                <div class="preview-header classic-preview">
+                                    <div class="preview-avatar"></div>
+                                    <div class="preview-info">
+                                        <div class="preview-name"></div>
+                                        <div class="preview-title"></div>
+                                    </div>
+                                </div>
+                                <div class="preview-content">
+                                    <div class="preview-section"></div>
+                                    <div class="preview-section"></div>
+                                </div>
+                            </div>
+                            <h3>Classic</h3>
+                            <p>Traditional and professional</p>
+                        </div>
+
+                        <div class="template-card" data-template="creative">
+                            <div class="template-preview">
+                                <div class="preview-header creative-preview">
+                                    <div class="preview-avatar"></div>
+                                    <div class="preview-info">
+                                        <div class="preview-name"></div>
+                                        <div class="preview-title"></div>
+                                    </div>
+                                </div>
+                                <div class="preview-content">
+                                    <div class="preview-section"></div>
+                                    <div class="preview-section"></div>
+                                </div>
+                            </div>
+                            <h3>Creative</h3>
+                            <p>Bold and artistic design</p>
+                        </div>
+
+                        <div class="template-card" data-template="minimal">
+                            <div class="template-preview">
+                                <div class="preview-header minimal-preview">
+                                    <div class="preview-avatar"></div>
+                                    <div class="preview-info">
+                                        <div class="preview-name"></div>
+                                        <div class="preview-title"></div>
+                                    </div>
+                                </div>
+                                <div class="preview-content">
+                                    <div class="preview-section"></div>
+                                    <div class="preview-section"></div>
+                                </div>
+                            </div>
+                            <h3>Minimal</h3>
+                            <p>Simple and elegant</p>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" id="generatePortfolio" disabled>
+                        <i class="fas fa-magic"></i> Generate Portfolio
+                    </button>
+                </section>
+
+                <!-- Step 4: Customize & Preview -->
+                <section id="customize-section" class="section">
+                    <div class="section-header">
+                        <h2><span class="step-number">4</span> Customize & Preview</h2>
+                        <p>Fine-tune your portfolio and see the live preview</p>
+                    </div>
+
+                    <div class="customize-container">
+                        <div class="customization-panel">
+                            <div class="customize-group">
+                                <h3><i class="fas fa-palette"></i> Colors</h3>
+                                <div class="color-options">
+                                    <label>Primary Color:</label>
+                                    <input type="color" id="primaryColor" value="#3b82f6">
+                                    <label>Secondary Color:</label>
+                                    <input type="color" id="secondaryColor" value="#1f2937">
+                                </div>
+                            </div>
+
+                            <div class="customize-group">
+                                <h3><i class="fas fa-font"></i> Typography</h3>
+                                <div class="font-options">
+                                    <label>Font Family:</label>
+                                    <select id="fontFamily">
+                                        <option value="Inter">Inter</option>
+                                        <option value="Roboto">Roboto</option>
+                                        <option value="Open Sans">Open Sans</option>
+                                        <option value="Poppins">Poppins</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="customize-group">
+                                <h3><i class="fas fa-cog"></i> Layout</h3>
+                                <div class="layout-options">
+                                    <label>
+                                        <input type="checkbox" id="showPhoto"> Show Profile Photo
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" id="showSocial" checked> Show Social Links
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-success" id="downloadPortfolio">
+                                <i class="fas fa-download"></i> Download Portfolio
+                            </button>
+                        </div>
+
+                        <div class="preview-panel">
+                            <div class="preview-header-bar">
+                                <span>Live Preview</span>
+                                <div class="preview-controls">
+                                    <button class="preview-btn active" data-device="desktop">
+                                        <i class="fas fa-desktop"></i>
+                                    </button>
+                                    <button class="preview-btn" data-device="tablet">
+                                        <i class="fas fa-tablet-alt"></i>
+                                    </button>
+                                    <button class="preview-btn" data-device="mobile">
+                                        <i class="fas fa-mobile-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="preview-container">
+                                <iframe id="portfolioPreview" class="portfolio-preview"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay hidden">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <h3>Processing your resume...</h3>
+                <p>This may take a few moments</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
