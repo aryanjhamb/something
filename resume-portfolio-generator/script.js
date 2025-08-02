@@ -442,12 +442,14 @@ class ResumePortfolioGenerator {
       summary: '',
       experience: [],
       education: [],
+      projects: [],
       skills: []
     }
 
     let currentSection = ''
     let currentExperience = null
     let currentEducation = null
+    let currentProject = null
 
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i]
@@ -484,6 +486,8 @@ class ResumePortfolioGenerator {
         currentSection = 'experience'
       } else if (lowerLine.includes('education') || lowerLine.includes('academic')) {
         currentSection = 'education'
+      } else if (lowerLine.includes('project')) {
+        currentSection = 'projects'
       } else if (lowerLine.includes('skills') || lowerLine.includes('technical skills') || lowerLine.includes('competencies')) {
         currentSection = 'skills'
       }
@@ -569,6 +573,32 @@ class ResumePortfolioGenerator {
         }
       }
 
+      // Parse projects
+      if (currentSection === 'projects') {
+        const bulletMatch = line.match(/^[•\-\*\u2022\s]+(.+)/)
+        const content = bulletMatch ? bulletMatch[1].trim() : line
+        if (content.length === 0) {
+          // Skip empty content
+        } else if (bulletMatch || (!currentProject && content.length < 80)) {
+          if (currentProject) {
+            parsedData.projects.push(currentProject)
+          }
+          let title = ''
+          let description = ''
+          const parts = content.split(':')
+          if (parts.length > 1) {
+            title = parts.shift().trim()
+            description = parts.join(':').trim()
+          } else {
+            title = content
+            description = ''
+          }
+          currentProject = { title, description }
+        } else if (currentProject) {
+          currentProject.description += ' ' + content
+        }
+      }
+
       // Parse skills
       if (currentSection === 'skills') {
         // Look for skill lists (comma-separated or bullet points)
@@ -588,6 +618,9 @@ class ResumePortfolioGenerator {
     }
     if (currentEducation) {
       parsedData.education.push(currentEducation)
+    }
+    if (currentProject) {
+      parsedData.projects.push(currentProject)
     }
 
     // Clean up skills (remove duplicates and empty entries)
